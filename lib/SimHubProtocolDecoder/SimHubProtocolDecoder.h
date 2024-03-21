@@ -53,6 +53,8 @@ static void decodeBuffer(EventCallBackManager *callbacker,Stream  *stream){
         Serial.flush();
         #endif
     }
+
+    // CUSTOM PACKETS
     if(packetType==0x09){
         packetType=stream->read();
 

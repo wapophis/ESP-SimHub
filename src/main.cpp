@@ -542,15 +542,15 @@ SHPWMPin shCONSPIN(CONS_PIN, 40);
 #define GAMEPAD_AXIS_03_EXPONENTIALFACTOR 1 //{"Name":"GAMEPAD_AXIS_03_EXPONENTIALFACTOR","Title":"Brake axis exponential correction","DefaultValue":"1","Type":"double","Condition":"GAMEPAD_AXIS_03_ENABLED>0","dMin":0.1,"dMax":1.9}
 
 #if(GAMEPAD_AXIS_01_ENABLED == 1)
-SHGamepadAxis SHGAMEPADAXIS01(GAMEPAD_AXIS_01_PIN, 0, GAMEPAD_AXIS_01_MINVALUE, GAMEPAD_AXIS_01_MAXVALUE, GAMEPAD_AXIS_01_SAMPLING, GAMEPAD_AXIS_01_EXPONENTIALFACTOR);
+SHGamepadAxis SHGAMEPADAXIS01(GAMEPAD_AXIS_01_PIN, 0, GAMEPAD_AXIS_01_MINVALUE, GAMEPAD_AXIS_01_MAXVALUE, GAMEPAD_AXIS_01_SAMPLING, GAMEPAD_AXIS_01_EXPONENTIALFACTOR,axisStatusChanged);
 #endif
 
 #if(GAMEPAD_AXIS_02_ENABLED == 1)
-SHGamepadAxis SHGAMEPADAXIS02(GAMEPAD_AXIS_02_PIN, 1, GAMEPAD_AXIS_02_MINVALUE, GAMEPAD_AXIS_02_MAXVALUE, GAMEPAD_AXIS_02_SAMPLING, GAMEPAD_AXIS_02_EXPONENTIALFACTOR);
+SHGamepadAxis SHGAMEPADAXIS02(GAMEPAD_AXIS_02_PIN, 1, GAMEPAD_AXIS_02_MINVALUE, GAMEPAD_AXIS_02_MAXVALUE, GAMEPAD_AXIS_02_SAMPLING, GAMEPAD_AXIS_02_EXPONENTIALFACTOR,axisStatusChanged);
 #endif
 
 #if(GAMEPAD_AXIS_03_ENABLED == 1)
-SHGamepadAxis SHGAMEPADAXIS03(GAMEPAD_AXIS_03_PIN, 2, GAMEPAD_AXIS_03_MINVALUE, GAMEPAD_AXIS_03_MAXVALUE, GAMEPAD_AXIS_03_SAMPLING, GAMEPAD_AXIS_03_EXPONENTIALFACTOR);
+SHGamepadAxis SHGAMEPADAXIS03(GAMEPAD_AXIS_03_PIN, 2, GAMEPAD_AXIS_03_MINVALUE, GAMEPAD_AXIS_03_MAXVALUE, GAMEPAD_AXIS_03_SAMPLING, GAMEPAD_AXIS_03_EXPONENTIALFACTOR,axisStatusChanged);
 #endif
 
 #endif // INCLUDE_GAMEPAD
@@ -1149,6 +1149,17 @@ void buttonStatusChanged(int buttonId, byte Status) {
 #endif
 }
 
+void axisStatusChanged(int axisId,int mappedValue){
+//	#if GAMEPAD_AXIS_01_ENABLED || GAMEPAD_AXIS_02_ENABLED ||GAMEPAD_AXIS_03_ENABLED
+	  #if IC2_SERIAL_BYPASS
+	  	arqserial.CustomPacketStart(0x13,2);
+		arqserial.CustomPacketSendByte(axisId);
+		arqserial.CustomPacketSendByte(mappedValue);
+		arqserial.CustomPacketEnd();
+	  #endif 
+//	#endif
+}
+
 #ifdef  INCLUDE_BUTTONMATRIX
 void buttonMatrixStatusChanged(int buttonId, byte Status) {
 #ifdef INCLUDE_GAMEPAD
@@ -1163,74 +1174,6 @@ void buttonMatrixStatusChanged(int buttonId, byte Status) {
 }
 #endif
 
-
-// #if IC2_SERIAL_BYPASS
-
-
-// void resendToSerialFromMasterDevice(size_t howManyChars){
-// 	// FlowSerialDebugPrintLn("Received data");
-//  //int recvBytes=0;
-
-// // int buttonId=-1;
-//  //byte buttonStatus=0;
-
-//  while (0 <Wire.available()) {
-//     char c = Wire.read();      /* receive byte as a character */
-// 	// if(recvBytes==3){
-// 	// 	buttonId=c;
-// 	// }
-// 	// if(recvBytes==4){
-// 	// 	buttonStatus=c;
-// 	// }
-// 	// recvBytes++;
-//    // Serial.write(c);
-//    //	 Serial.flush();
-//  //   Serial.print(c);           /* print the character */
-// 	FlowSerialWrite(c);
-//   }
-// 	// buttonStatusChanged(buttonId,buttonStatus);
-//  //Serial.println();             /* to newline */
-// }
-
-
-// bool isSlaveAvailable(){
-// 	Wire.beginTransmission(IC2_ADDRESS);
-//     uint8_t error = endWireTransmission(true);
-
-// 	if(error==0){
-// 		Serial.printf("\n Slave device detected at address 8\n");
-// 		return true;
-// 	}
-// 	return false;
-// }
-
-// /** SETUP SERIAL BYPASS IC2 MASTER, USE WHEN THIS DEVICE COMMAND THE SENDING WORKFLOW*/
-// void ic2SetupMaster(){
-// 	WIRE.begin();
-// 	while(!isSlaveAvailable()){
-// 			Serial.printf("\n Slave device not available, retrying 1 sec later");
-// 			delay(1000);
-// 	};
-// }
-
-// /** SETUP SERIAL BYPASS IC2 SLAVE, USE WHEN THIS DEVICE IS CONNECTED TO SIMHUB*/
-// void ic2SetupSlave(){
-// 	Wire.begin(IC2_ADDRESS);
-// 	Wire.onReceive(resendToSerialFromMasterDevice); /* register receive event */
-// }
-
-
-// void ic2SetupSerialBypass(){
-//  #if IC2_MASTER
-// 	ic2SetupMaster();
-//  #endif
-//  #if IC2_SLAVE
-// 	ic2SetupSlave();
-//  #endif
-
-// }
-
-// #endif
 
 
 /*****
@@ -1505,12 +1448,18 @@ unsigned long lastSerialActivity = 0;
  * 
  * MAIN LOOP
 */
+int aAxisCounter=0;
 void loop() {
 #if INCLUDE_WIFI
 	ECrowneWifi::loop();
 #endif
 
 #if IC2_SERIAL_BYPASS
+	aAxisCounter++;
+	axisStatusChanged(1,aAxisCounter);
+	if(aAxisCounter>1024){
+		aAxisCounter=0;
+	}
 	IC2TransportManager::loop();
 #endif
 
@@ -1538,6 +1487,8 @@ void loop() {
 #ifdef INCLUDE_GAMEPAD
 	UpdateGamepadState();
 #endif
+
+
 	shCustomProtocol.loop();
 	//delay(1000);
 	//Serial.printf("\nI'm alive\n");

@@ -36,6 +36,10 @@ class I2CTransportSlave : public I2CTransport {
 
 	 void ic2SetupSlave(){
 		WIRE.begin(IC2_ADDRESS);
+		/**
+		 * BECAUSE THERE IS NO JOYSTICK SUPPORT IN THE ESP IMPL DEFAULT IMPL FOR ESP IS THIS IMPL TO RESEND ALL THE FLOW
+		 * TO THE TRANSPORT STREAM WHICH IS CONFIGURED FOR THE DEVICE. 
+		*/
 		WIRE.onReceive(resendToSerialFromDevice); /* register receive event */
 	}
 };
