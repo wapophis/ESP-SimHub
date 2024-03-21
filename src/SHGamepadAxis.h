@@ -4,9 +4,13 @@
 #include <Arduino.h>
 #include <Joystick.h>
 
+
+typedef void(*SHAxisChanged) (int, int);
+
+
 class SHGamepadAxis {
 private:
-
+	SHAxisChanged shAxisChangedCallback;
 	int lastAxisValue = -1;
 	int axisPin = -1;
 	int axisIdx = -1;
@@ -51,6 +55,11 @@ private:
 
 public:
 
+	SHGamepadAxis(byte axisPin, int axisIdx, int minimumInputValue, int maximumInputValue, int samplingRate, double exponentialFactor = 1,SHAxisChanged callback){
+			shAxisChangedCallback=callback;
+			SHGamepadAxis axisPin, axisIdx, minimumInputValue, maximumInputValue, samplingRate, exponentialFactor)
+	}
+
 	SHGamepadAxis(byte axisPin, int axisIdx, int minimumInputValue, int maximumInputValue, int samplingRate, double exponentialFactor = 1) {
 		this->axisIdx = axisIdx;
 		this->axisPin = axisPin;
@@ -68,7 +77,7 @@ public:
 	bool read() {
 		int pot = analogReadXXbit(axisPin, samplingRate);
 
-		if (lastAxisValue != pot) {
+		if (lastAxisValue != pot) { 
 			lastAxisValue = pot;
 
 			int mapped = map(pot, minimumInputValue, maximumInputValue, 0, 1024);
