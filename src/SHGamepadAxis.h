@@ -10,7 +10,7 @@ typedef void(*SHAxisChanged) (int, int);
 
 class SHGamepadAxis {
 private:
-	SHAxisChanged shAxisChangedCallback;
+	SHAxisChanged shAxisChangedCallback=null;
 	int lastAxisValue = -1;
 	int axisPin = -1;
 	int axisIdx = -1;
@@ -89,6 +89,9 @@ public:
 
 			mapped2 = mapped2 * 1024;
 			setAxis(axisIdx, mapped2);
+			if(this->shAxisChangedCallback!=null){
+				shAxisChangedCallback(axisIdx,mapped2);
+			}
 		}
 	}
 };
