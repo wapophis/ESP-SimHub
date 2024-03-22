@@ -18,9 +18,10 @@
 	#define IC2_ADDRESS 0x08
 	#define IC2_SERIAL_BYPASS_DEBUG true
 	#include <I2CManager.h>
+	#include <AnalogAxis.h>
 
 	FullLoopbackStream outgoingStream;
-	
+	AnalogAxisSimulator axis1(1);
 #endif
 
 #if INCLUDE_WIFI
@@ -1014,6 +1015,8 @@ void idle(bool critical) {
 	ECrowneWifi::flush();
 #endif
 #if IC2_SERIAL_BYPASS
+	axis1.read(10);
+	
 	yield();
 	IC2TransportManager::flush();
 #endif
@@ -1127,6 +1130,30 @@ void EncoderPositionChanged(int encoderId, int position, byte direction) {
 	Serial.flush();
 	return error;
 */
+
+
+/**
+ * 
+ * 
+*/
+void axisStatusChanged(int axisId,int mappedValue){
+	#if IC2_SERIAL_BYPASS
+		if(IC2_SERIAL_BYPASS_DEBUG){
+			Serial.print("AxisStatusChanged");
+		}
+		
+	  	arqserial.CustomPacketStart(0x13,3);
+		arqserial.CustomPacketSendByte(axisId);
+		arqserial.CustomPacketSendByte(highByte(mappedValue));
+		arqserial.CustomPacketSendByte(lowByte(mappedValue));
+		arqserial.CustomPacketEnd();
+	#endif
+	}
+
+/**
+ * 
+ * 
+ * */	
 void buttonStatusChanged(int buttonId, byte Status) {
 #ifdef INCLUDE_GAMEPAD
 	Joystick.setButton(TM1638_ENABLEDMODULES * 8 + buttonId - 1, Status);
@@ -1149,16 +1176,7 @@ void buttonStatusChanged(int buttonId, byte Status) {
 #endif
 }
 
-void axisStatusChanged(int axisId,int mappedValue){
-//	#if GAMEPAD_AXIS_01_ENABLED || GAMEPAD_AXIS_02_ENABLED ||GAMEPAD_AXIS_03_ENABLED
-	  #if IC2_SERIAL_BYPASS
-	  	arqserial.CustomPacketStart(0x13,2);
-		arqserial.CustomPacketSendByte(axisId);
-		arqserial.CustomPacketSendByte(mappedValue);
-		arqserial.CustomPacketEnd();
-	  #endif 
-//	#endif
-}
+
 
 #ifdef  INCLUDE_BUTTONMATRIX
 void buttonMatrixStatusChanged(int buttonId, byte Status) {
@@ -1173,6 +1191,7 @@ void buttonMatrixStatusChanged(int buttonId, byte Status) {
 #endif
 }
 #endif
+
 
 
 
@@ -1192,7 +1211,10 @@ void setup()
 	ECrowneWifi::setup(&outgoingStream, &incomingStream);
 #endif
 #if IC2_SERIAL_BYPASS
+	
 	IC2TransportManager::setup(&outgoingStream);
+	axis1.setCallBack(axisStatusChanged);
+
 #endif
 	//#ifdef INCLUDE_TEMPGAUGE
 	//	shTEMPPIN.SetValue((int)80);
@@ -1440,26 +1462,23 @@ void UpdateGamepadEncodersState(bool sendState) {
 #endif
 #endif
 
+
+
 char loop_opt;
 char xactionc;
 unsigned long lastSerialActivity = 0;
-
 /****
  * 
  * MAIN LOOP
 */
-int aAxisCounter=0;
 void loop() {
 #if INCLUDE_WIFI
 	ECrowneWifi::loop();
 #endif
 
 #if IC2_SERIAL_BYPASS
-	aAxisCounter++;
-	axisStatusChanged(1,aAxisCounter);
-	if(aAxisCounter>1024){
-		aAxisCounter=0;
-	}
+	
+
 	IC2TransportManager::loop();
 #endif
 

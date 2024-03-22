@@ -148,7 +148,7 @@ private:
 		StreamWrite(0x03);
 		StreamWrite(packetId);
 		StreamFlush();
-		Serial.printf("\nSendAcq[start,packetId]: [0x03,%d,%d]",packetId);
+		//Serial.printf("\nSendAcq[start,packetId]: [0x03,%d,%d]",packetId);
 	}
 
 	void SendNAcq(uint8_t lastKnownValidPacket, byte reason)
@@ -157,7 +157,7 @@ private:
 		StreamWrite(lastKnownValidPacket);
 		StreamWrite(reason);
 		StreamFlush();
-		Serial.printf("\nSendNAcq[start,lastKnownValidPacket,reason]: [0x04,%d,%d]",lastKnownValidPacket,reason);
+		//Serial.printf("\nSendNAcq[start,lastKnownValidPacket,reason]: [0x04,%d,%d]",lastKnownValidPacket,reason);
 	}
 
 public:
@@ -170,7 +170,10 @@ public:
 		StreamWrite(0x09);
 		StreamWrite(packetType);
 		StreamWrite(length);
-		Serial.printf("\nCustomPacketStart[start,packetType,length]: [0x09,%d,%d]",packetType,length);
+	//	Serial.write(0x09);
+	//	Serial.write(packetType);
+	//	Serial.write(length);
+		//Serial.printf("\nCustomPacketStart[start,packetType,length]: [0x09,%d,%d]",packetType,length);
 	}
 
 	// void I2CustomPacketStart(byte packetType, uint8_t length) {
@@ -182,7 +185,8 @@ public:
 
 	void CustomPacketSendByte(byte data) {
 		StreamWrite(data);
-		Serial.printf("\nCustomPacketSendByte[data]: [%d]",data);
+		Serial.write(data);
+		//Serial.printf("\nCustomPacketSendByte[data]: [%d]",data);
 	}
 
 	// void I2CustomPacketSendByte(byte data) {

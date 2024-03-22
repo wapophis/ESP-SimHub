@@ -2,7 +2,7 @@
 #define __SHGAMEPADAXIS_H__
 
 #include <Arduino.h>
-#include <Joystick.h>
+/*#include <Joystick.h>*/
 
 
 typedef void(*SHAxisChanged) (int, int);
@@ -10,14 +10,14 @@ typedef void(*SHAxisChanged) (int, int);
 
 class SHGamepadAxis {
 private:
-	SHAxisChanged shAxisChangedCallback=null;
+	SHAxisChanged shAxisChangedCallback=nullptr;
 	int lastAxisValue = -1;
 	int axisPin = -1;
 	int axisIdx = -1;
 	int minimumInputValue;
 	int maximumInputValue;
 	int samplingRate;
-	Joystick_* joystick;
+	//Joystick_* joystick;
 	float  exponentialFactor;
 	float analogReadXXbit(uint8_t analogPin, uint8_t bits_of_precision)
 	{
@@ -40,25 +40,20 @@ private:
 		switch (axisIdx)
 		{
 		case 0:
-			joystick->setThrottle(value); break;
+		//	joystick->setThrottle(value); break;
 		case 1:
-			joystick->setAccelerator(value); break;
+			//joystick->setAccelerator(value); break;
 		case 2:
-			joystick->setBrake(value); break;
+			//joystick->setBrake(value); break;
 
 		default:
 			break;
 		}
 
-		joystick->sendState();
+		//joystick->sendState();
 	}
 
 public:
-
-	SHGamepadAxis(byte axisPin, int axisIdx, int minimumInputValue, int maximumInputValue, int samplingRate, double exponentialFactor = 1,SHAxisChanged callback){
-			shAxisChangedCallback=callback;
-			SHGamepadAxis axisPin, axisIdx, minimumInputValue, maximumInputValue, samplingRate, exponentialFactor)
-	}
 
 	SHGamepadAxis(byte axisPin, int axisIdx, int minimumInputValue, int maximumInputValue, int samplingRate, double exponentialFactor = 1) {
 		this->axisIdx = axisIdx;
@@ -69,10 +64,14 @@ public:
 		this->exponentialFactor = exponentialFactor;
 	}
 
-	void SetJoystick(Joystick_* joystick) {
-		this->joystick = joystick;
-		read();
+	void setCallBack(SHAxisChanged callback){
+		this->shAxisChangedCallback=callback;
 	}
+
+	// void SetJoystick(Joystick_* joystick) {
+	// 	this->joystick = joystick;
+	// 	read();
+	// }
 
 	bool read() {
 		int pot = analogReadXXbit(axisPin, samplingRate);
@@ -81,7 +80,7 @@ public:
 			lastAxisValue = pot;
 
 			int mapped = map(pot, minimumInputValue, maximumInputValue, 0, 1024);
-			float mapped2 = min(1, max(0, (float)mapped / (float)1024));
+			float mapped2 = min(1, max(0, (mapped / 1024)));
 
 			if (exponentialFactor != 1) {
 				mapped2 = pow(mapped2, 1.0 / (float)exponentialFactor);
@@ -89,11 +88,32 @@ public:
 
 			mapped2 = mapped2 * 1024;
 			setAxis(axisIdx, mapped2);
-			if(this->shAxisChangedCallback!=null){
+			if(this->shAxisChangedCallback!=nullptr){
 				shAxisChangedCallback(axisIdx,mapped2);
 			}
 		}
 	}
+
+	bool setAxisAnalogReading(int pot) {
+		
+		if (lastAxisValue != pot) { 
+			lastAxisValue = pot;
+
+			int mapped = map(pot, minimumInputValue, maximumInputValue, 0, 1024);
+			float mapped2 = min(1, max(0, (mapped / 1024)));
+
+			if (exponentialFactor != 1) {
+				mapped2 = pow(mapped2, 1.0 / (float)exponentialFactor);
+			}
+
+			mapped2 = mapped2 * 1024;
+			setAxis(axisIdx, mapped2);
+			if(this->shAxisChangedCallback!=nullptr){
+				shAxisChangedCallback(axisIdx,mapped2);
+			}
+		}
+	}
+
 };
 
 #endif
