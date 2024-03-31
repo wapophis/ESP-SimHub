@@ -51,8 +51,8 @@ class I2CSerialBridge{
     }
 
 
-     /** SETUP SERIAL BYPASS IC2 MASTER, USE WHEN THIS DEVICE COMMAND THE SENDING WORKFLOW*/
-    void ic2SetupMaster(){
+     /** SETUP SERIAL BYPASS I2C MASTER, USE WHEN THIS DEVICE COMMAND THE SENDING WORKFLOW*/
+    void i2cSetupMaster(){
 	WIRE.begin();
 
 	while(!isSlaveAvailable()){
@@ -97,12 +97,12 @@ uint8_t endWireTransmission(bool stop){
 }
 
 bool isSlaveAvailable(){
-     #if IC2_SERIAL_BYPASS_DEBUG
+     #if I2C_SERIAL_BYPASS_DEBUG
             Serial.print("\n Testing slave availability -> Beging transmission to  ");
-            Serial.print(IC2_ADDRESS);
+            Serial.print(I2C_ADDRESS);
             Serial.println("\n");
      #endif
-	WIRE.beginTransmission(IC2_ADDRESS);
+	WIRE.beginTransmission(I2C_ADDRESS);
     uint8_t error = endWireTransmission(true);
 
 	if(error==0){
