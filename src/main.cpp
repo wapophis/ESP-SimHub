@@ -561,7 +561,7 @@ SHGamepadAxis SHGAMEPADAXIS03(GAMEPAD_AXIS_03_PIN, 2, GAMEPAD_AXIS_03_MINVALUE, 
 // ----------------------- ADDITIONAL BUTTONS ---------------------------------------------------------------
 // https://github.com/zegreatclan/SimHub/wiki/Arduino-Press-Buttons
 // ----------------------------------------------------------------------------------------------------------
-#define ENABLED_BUTTONS_COUNT 8 //{"Group":"Additional Buttons","Name":"ENABLED_BUTTONS_COUNT","Title":"Additional buttons (directly connected to the arduino, 12 max) buttons count","DefaultValue":"0","Type":"int","Max":12}
+#define ENABLED_BUTTONS_COUNT 2 //{"Group":"Additional Buttons","Name":"ENABLED_BUTTONS_COUNT","Title":"Additional buttons (directly connected to the arduino, 12 max) buttons count","DefaultValue":"0","Type":"int","Max":12}
 #ifdef  INCLUDE_BUTTONS
 
 #define BUTTON_PIN_1 D3         //{"Name":"BUTTON_PIN_1","Title":"1'st Additional button digital pin","DefaultValue":"3","Type":"pin;Button 1","Condition":"ENABLED_BUTTONS_COUNT>=1"}
@@ -1058,7 +1058,13 @@ void idle(bool critical) {
 		bool changed = false;
 #ifdef INCLUDE_BUTTONS
 		for (int btnIdx = 0; btnIdx < ENABLED_BUTTONS_COUNT; btnIdx++) {
-			BUTTONS[btnIdx]->read();
+			#if I2C_SERIAL_BYPASS
+				if(BUTTON_TYPE[btnIdx]==0){
+					BUTTONS[btnIdx]->read();
+				}
+			#else
+				BUTTONS[btnIdx]->read();
+			#endif
 		}
 #endif
 #ifdef INCLUDE_TM1638
@@ -1225,7 +1231,7 @@ void setup()
 	ECrowneWifi::setup(&outgoingStream, &incomingStream);
 #endif
 #if I2C_SERIAL_BYPASS
-	
+
 	I2CTransportManager::setup(&outgoingStream);
 	//axis1.setCallBack(axisStatusChanged);
 
@@ -1357,7 +1363,7 @@ void setup()
 	// EXTERNAL BUTTONS INIT
 	for (int btnIdx = 0; btnIdx < ENABLED_BUTTONS_COUNT; btnIdx++) {
 		#if I2C_SERIAL_BYPASS
-		if(BUTTON_TYPE[btnIdx]==0 && I2C_BYPASS_SLAVE){
+		if(BUTTON_TYPE[btnIdx]==0){
 			BUTTONS[btnIdx]->begin(btnIdx + 1, BUTTON_PINS[btnIdx], buttonStatusChanged, BUTTON_WIRING_MODES[btnIdx], BUTTON_LOGIC_MODES[btnIdx]);
 		}
 		#else
@@ -1497,8 +1503,6 @@ void loop() {
 #endif
 
 #if I2C_SERIAL_BYPASS
-	
-
 	I2CTransportManager::loop();
 #endif
 

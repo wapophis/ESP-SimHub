@@ -21,6 +21,10 @@ class I2CSerialBridge{
         }
 
         void loop() {
+        #if I2C_SERIAL_BYPASS_DEBUG
+           // Serial.println("\n I2CSerialBridge - loop");
+           // Serial.flush();
+        #endif
         // put your main code here, to run repeatedly
         check_status();
         this->flush();
@@ -32,9 +36,12 @@ class I2CSerialBridge{
     size_t availableLength = this->outgoingStream->available();
     if (availableLength)
     {
-        #if DEBUG_TCP_BRIDGE
+        #if I2C_SERIAL_BYPASS_DEBUG
+            Serial.println("\n I2CSerialBridge - flush");
             Serial.printf("flushing with this much data: %d \n", availableLength);
         #endif
+
+        
       // read the available data from the stream, and put in in the buffer
       char sbuf[availableLength];
       this->outgoingStream->readBytes(sbuf, availableLength);
@@ -43,9 +50,11 @@ class I2CSerialBridge{
         WIRE.beginTransmission(address);
         size_t total = WIRE.write(sbuf, availableLength);
         WIRE.endTransmission();
-        #if DEBUG_TCP_BRIDGE
-            Serial.printf("\n ---> data sent to client %s: %d bytes \n", client->remoteIP().toString().c_str(), total);
-            Serial.printf("%d %d\n",sbuf[0], sbuf[1]);
+
+        #if I2C_SERIAL_BYPASS_DEBUG
+ //           Serial.println("\n I2CSerialBridge - flush");
+//            Serial.printf("\n ---> data sent to client %s: %d bytes \n", I2C_ADDRESS, total);
+            // Serial.printf("%d %d\n",sbuf[0], sbuf[1]);
         #endif
       }
     }
@@ -64,7 +73,10 @@ class I2CSerialBridge{
     private:
         /** TODO CONTROL THAT TRANSPORT LAYER IS READY AND CONNECTED*/
         void check_status(){
-
+        #if I2C_SERIAL_BYPASS_DEBUG
+          //  Serial.println("\n I2CSerialBridge - check_status");
+          //  Serial.flush();
+        #endif
         }
 
      
@@ -72,7 +84,7 @@ class I2CSerialBridge{
 
 uint8_t endWireTransmission(bool stop){
 	uint8_t error=WIRE.endTransmission(stop);
-	if(error=0){
+	if(error==0){
 		Serial.print("\n Correct wire close \n");
 	}
 	if(error==1){
