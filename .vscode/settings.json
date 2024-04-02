@@ -32,5 +32,6 @@
         "numeric": "cpp",
         "set": "cpp",
         "cstddef": "cpp"
-    }
+    },
+    "cmake.configureOnOpen": false
 }
