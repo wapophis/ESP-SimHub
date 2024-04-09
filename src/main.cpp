@@ -1190,7 +1190,7 @@ void buttonStatusChanged(int buttonId, byte Status) {
 
 #ifdef  INCLUDE_BUTTONMATRIX
 void buttonMatrixStatusChanged(int buttonId, byte Status) {
-#ifdef INCLUDE_GAMEPAD
+#ifdef INCLUDE_GAMEPAD  && !I2C_BYPASS_MASTER
 	Joystick.setButton(TM1638_ENABLEDMODULES * 8 + ENABLED_BUTTONS_COUNT + buttonId - 1, Status);
 	Joystick.sendState();
 #else
