@@ -1,6 +1,6 @@
 #pragma once
 #include <Wire.h>
-#include <HardWareSerial.h>
+
 #include <FullLoopbackStream.h>
 
 #ifndef WIRE
