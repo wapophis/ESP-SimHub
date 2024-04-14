@@ -22,8 +22,8 @@ class I2CSerialBridge{
 
         void loop() {
         #if I2C_SERIAL_BYPASS_DEBUG
-           // Serial.println("\n I2CSerialBridge - loop");
-           // Serial.flush();
+          //  Serial.print("\n I2CSerialBridge - loop");
+          //  Serial.flush();
         #endif
         // put your main code here, to run repeatedly
         check_status();
@@ -38,7 +38,8 @@ class I2CSerialBridge{
     {
         #if I2C_SERIAL_BYPASS_DEBUG
             Serial.println("\n I2CSerialBridge - flush");
-            Serial.printf("flushing with this much data: %d \n", availableLength);
+            Serial.print("\nflushing with this much data:");
+            Serial.print(availableLength);
         #endif
 
         
@@ -63,9 +64,10 @@ class I2CSerialBridge{
      /** SETUP SERIAL BYPASS I2C MASTER, USE WHEN THIS DEVICE COMMAND THE SENDING WORKFLOW*/
     void i2cSetupMaster(){
 	WIRE.begin();
+    Wire.setWireTimeout(300);
 
 	while(!isSlaveAvailable()){
-			Serial.printf("\n Slave device not available, retrying 1 sec later");
+			Serial.print("\n Slave device not available, retrying 1 sec later");
 			delay(1000);
 	};
     }
@@ -102,7 +104,9 @@ uint8_t endWireTransmission(bool stop){
 	if(error==5){
 		Serial.print("timeout");
 	}
-    Serial.printf("\n Error code is %d",error);
+    Serial.print("\n Error code is");
+    Serial.print(error);
+    Serial.println();
 	Serial.flush();
 	return error;
 
@@ -118,7 +122,9 @@ bool isSlaveAvailable(){
     uint8_t error = endWireTransmission(true);
 
 	if(error==0){
-		Serial.printf("\n Slave device detected at address 8\n");
+		Serial.print("\n Slave device detected at address ");
+        Serial.print(I2C_ADDRESS);
+        Serial.print("\n");
 		return true;
 	}
 	return false;

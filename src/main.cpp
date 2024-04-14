@@ -1406,8 +1406,8 @@ void setup()
 
 	shCustomProtocol.setup();
 	arqserial.setIdleFunction(idle);
-	Serial.begin(115200);
-	delay(200);
+	// Serial.begin(115200);
+	// delay(200);
 
 #if(GAMEPAD_AXIS_01_ENABLED == 1)
 	SHGAMEPADAXIS01.SetJoystick(&Joystick);

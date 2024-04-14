@@ -210,7 +210,7 @@ public:
 			if (DataBuffer.size() > 0) {
 				uint8_t res = 0;
 				DataBuffer.pop(res);
-				Serial1.printf("\nread[data]: [%d]",res);
+				//Serial1.print("\nread[data]: [%d]",res);
 				return (int)res;
 			}
 
@@ -235,7 +235,7 @@ public:
 		StreamWrite(0x08);
 		StreamWrite(data);
 		StreamFlush();
-		Serial1.printf("\nWrite[start,data]: [0x08,%d]",data);
+		//Serial1.printf("\nWrite[start,data]: [0x08,%d]",data);
 	}
 
 	void Print(char data)
