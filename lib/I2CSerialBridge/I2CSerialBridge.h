@@ -64,7 +64,7 @@ class I2CSerialBridge{
      /** SETUP SERIAL BYPASS I2C MASTER, USE WHEN THIS DEVICE COMMAND THE SENDING WORKFLOW*/
     void i2cSetupMaster(){
 	WIRE.begin();
-    Wire.setWireTimeout(300);
+    WIRE.setTimeout(300);
 
 	while(!isSlaveAvailable()){
 			Serial.print("\n Slave device not available, retrying 1 sec later");
