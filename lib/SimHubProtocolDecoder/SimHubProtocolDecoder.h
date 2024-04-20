@@ -38,6 +38,12 @@ class EventCallBackManager{
 static void decodeBuffer(EventCallBackManager *callbacker,Stream  *stream){
     byte packetType=0x0;
     int size=-1;
+   //TODO: REMOVE IS FOR TESTING
+    // while(stream->available()){
+    //         Serial.write(stream->read());
+    //     }
+    // return;
+    #define IC2_SERIAL_BYPASS_DEBUG false
     #if IC2_SERIAL_BYPASS_DEBUG
         Serial.print("\n Disponible en buffer ");
         Serial.print(stream->available());
@@ -47,17 +53,18 @@ static void decodeBuffer(EventCallBackManager *callbacker,Stream  *stream){
     if(stream->available()){
        packetType=stream->read();
         #if IC2_SERIAL_BYPASS_DEBUG
-        Serial.print("\n packetType ");
+        Serial.print("\n Initial packetType  ");
         Serial.print(packetType);
         Serial.print("\n");
         Serial.flush();
         #endif
     }
+
+    // CUSTOM PACKETS
     if(packetType==0x09){
         packetType=stream->read();
-
          #if IC2_SERIAL_BYPASS_DEBUG
-        Serial.print("\n packetType ");
+        Serial.print("\n Accepted packetType ");
         Serial.print(packetType);
         Serial.print("\n");
         Serial.flush();
@@ -72,35 +79,32 @@ static void decodeBuffer(EventCallBackManager *callbacker,Stream  *stream){
         Serial.flush();
         #endif
 
+        if(packetType==0x01){
+             int encoderId=stream->read();
+             byte direction=stream->read();
+             int position=stream->read(); 
+             callbacker->getEncoderPositionChangedCallback()(encoderId,position,direction);
+        }
 
-        switch (packetType){
-                case 0x01:
-                   // callbacker->getEncoderPositionChangedCallback()(stream->read(),stream->read(),stream->read());
-                    break;
-                case 0x02:
-                    //callbacker->getEncoderPositionChangedCallback()(stream->read(),stream->read(),stream->read());
-                    break;
-                case 0x03:
-                    int buttonId;
-                    buttonId=stream->read();
-                    byte status;
-                    status=stream->read();
-                    #if IC2_SERIAL_BYPASS_DEBUG
-                        Serial.print("\n BUtton state changed ");
-                        Serial.println(buttonId);
-                        Serial.println(status);
-                        Serial.flush();
-                    #endif
-                    callbacker->getButtonCallback()(buttonId,status);
-                    break;
-                case 0x04:
-                    // TODO: FIXME
-                    //callbacker->getButtonCallback()((stream->read())*8+stream->read(),stream->read());
-                    break;
-                default:
-                    break;
-            }
+        if(packetType==0x02){
+            int encoderId=stream->read();
+            byte direction=stream->read();
+            callbacker->getEncoderPositionChangedCallback()(encoderId,direction,0xD7); // 0XD7 Identify a button status changed 
+        }
 
+        if(packetType==0x03){
+            int buttonId;
+            buttonId=stream->read();
+            byte status;
+            status=stream->read();
+            #if IC2_SERIAL_BYPASS_DEBUG
+                Serial.print("\n BUtton state changed ");
+                Serial.println(buttonId);
+                Serial.println(status);
+                Serial.flush();
+            #endif
+            callbacker->getButtonCallback()(buttonId,status);
+        }
 
         while (0 <stream->available()){
             Serial.write(stream->read());
