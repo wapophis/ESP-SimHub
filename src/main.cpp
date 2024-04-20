@@ -13,7 +13,7 @@
 
 #if I2C_SERIAL_BYPASS
 	#define WIRE Wire
-	#define I2C_MASTER 	true
+	#define I2C_BYPASS_MASTER 	true
 	#define I2C_BYPASS_SLAVE false
 	#define I2C_ADDRESS 0x08
 	#define I2C_SERIAL_BYPASS_DEBUG true
@@ -561,7 +561,7 @@ SHGamepadAxis SHGAMEPADAXIS03(GAMEPAD_AXIS_03_PIN, 2, GAMEPAD_AXIS_03_MINVALUE, 
 // ----------------------- ADDITIONAL BUTTONS ---------------------------------------------------------------
 // https://github.com/zegreatclan/SimHub/wiki/Arduino-Press-Buttons
 // ----------------------------------------------------------------------------------------------------------
-#define ENABLED_BUTTONS_COUNT 6 //{"Group":"Additional Buttons","Name":"ENABLED_BUTTONS_COUNT","Title":"Additional buttons (directly connected to the arduino, 12 max) buttons count","DefaultValue":"0","Type":"int","Max":12}
+#define ENABLED_BUTTONS_COUNT 2 //{"Group":"Additional Buttons","Name":"ENABLED_BUTTONS_COUNT","Title":"Additional buttons (directly connected to the arduino, 12 max) buttons count","DefaultValue":"0","Type":"int","Max":12}
 #ifdef  INCLUDE_BUTTONS
 
 #define BUTTON_PIN_1 D3         //{"Name":"BUTTON_PIN_1","Title":"1'st Additional button digital pin","DefaultValue":"3","Type":"pin;Button 1","Condition":"ENABLED_BUTTONS_COUNT>=1"}
@@ -641,7 +641,7 @@ SHDebouncer ButtonsDebouncer(10);
 // https://www.dx.com/p/ky-040-rotary-encoder-module-brick-sensor-development-for-arduino-avr-pic-420429#.W9BCM0sza0Q
 // Rotary encoders with pull-up resistors on the 3 outputs
 // ----------------------------------------------------------------------------------------------------------
-#define ENABLED_ENCODERS_COUNT 0     //{"Group":"Rotary Encoders","Name":"ENABLED_ENCODERS_COUNT","Title":"Rotary encoders enabled","DefaultValue":"0","Type":"int","Max":8}
+#define ENABLED_ENCODERS_COUNT 1     //{"Group":"Rotary Encoders","Name":"ENABLED_ENCODERS_COUNT","Title":"Rotary encoders enabled","DefaultValue":"0","Type":"int","Max":8}
 #ifdef  INCLUDE_ENCODERS
 #include "SHRotaryEncoder.h"
 
@@ -651,36 +651,36 @@ SHDebouncer ButtonsDebouncer(10);
 	void VirtualEncoderPositionChanged(int encoderId,int position, byte direction);
 #endif
 
-#define ENCODER1_CLK_PIN 8           //{"Name":"ENCODER1_CLK_PIN","Title":"Encoder 1 output A (CLK) pin","DefaultValue":"7","Type":"pin;Encoder 1 CLK","Condition":"ENABLED_ENCODERS_COUNT>0"}
-#define ENCODER1_DT_PIN 9            //{"Name":"ENCODER1_DT_PIN","Title":"Encoder 1 output B (DT) pin","DefaultValue":"8","Type":"pin;Encoder 1 DT","Condition":"ENABLED_ENCODERS_COUNT>0"}
-#define ENCODER1_BUTTON_PIN 5        //{"Name":"ENCODER1_BUTTON_PIN","Title":"Encoder 1 button (SW) pin","DefaultValue":"9","Type":"pin;Encoder 1 SWITCH","Condition":"ENABLED_ENCODERS_COUNT>0","Min":-1}
+#define ENCODER1_CLK_PIN D5           //{"Name":"ENCODER1_CLK_PIN","Title":"Encoder 1 output A (CLK) pin","DefaultValue":"7","Type":"pin;Encoder 1 CLK","Condition":"ENABLED_ENCODERS_COUNT>0"}
+#define ENCODER1_DT_PIN D6            //{"Name":"ENCODER1_DT_PIN","Title":"Encoder 1 output B (DT) pin","DefaultValue":"8","Type":"pin;Encoder 1 DT","Condition":"ENABLED_ENCODERS_COUNT>0"}
+#define ENCODER1_BUTTON_PIN D7        //{"Name":"ENCODER1_BUTTON_PIN","Title":"Encoder 1 button (SW) pin","DefaultValue":"9","Type":"pin;Encoder 1 SWITCH","Condition":"ENABLED_ENCODERS_COUNT>0","Min":-1}
 #define ENCODER1_BUTTON_TYPE 0		 //{"Name":"ENCODER1_BUTTON_TYPE","Title":"Is virtual button encoder","DefaultValue":"0","Type":"list","Condition":"ENABLED_ENCODERS_COUNT>0","ListValues":"0,Physically Connected;1,Serialized"}
 #define ENCODER1_ENABLE_PULLUP 1     //{"Name":"ENCODER1_ENABLE_PULLUP","Title":"Encoder 1 enable pullup resistor","DefaultValue":"0","Type":"bool","Condition":"ENABLED_ENCODERS_COUNT>0"}
 #define ENCODER1_REVERSE_DIRECTION 0 //{"Name":"ENCODER1_REVERSE_DIRECTION","Title":"Encoder 1 reverse direction","DefaultValue":"0","Type":"bool","Condition":"ENABLED_ENCODERS_COUNT>0"}
 #define ENCODER1_ENABLE_HALFSTEPS 0  //{"Name":"ENCODER1_ENABLE_HALFSTEPS","Title":"Encoder 1 steps mode","DefaultValue":"0","Type":"list","Condition":"ENABLED_ENCODERS_COUNT>=1","ListValues":"0,Full steps;1,Half steps"}
-#define ENCODER1_TYPE 1			 	 //{"Name":"ENCODER1_TYPE","Title":"Is virtual encoder","DefaultValue":"0","Type":"list","Condition":"ENABLED_ENCODERS_COUNT>0","ListValues":"0,Physically Connected;1,Serialized"}
+#define ENCODER1_TYPE 0			 	 //{"Name":"ENCODER1_TYPE","Title":"Is virtual encoder","DefaultValue":"0","Type":"list","Condition":"ENABLED_ENCODERS_COUNT>0","ListValues":"0,Physically Connected;1,Serialized"}
 
-#define ENCODER2_CLK_PIN 11          //{"Name":"ENCODER2_CLK_PIN","Title":"Encoder 2 output A (CLK) pin","DefaultValue":"11","Type":"pin;Encoder 2 CLK","Condition":"ENABLED_ENCODERS_COUNT>1"}
-#define ENCODER2_DT_PIN 12           //{"Name":"ENCODER2_DT_PIN","Title":"Encoder 2 output B (DT) pin","DefaultValue":"12","Type":"pin;Encoder 2 DT","Condition":"ENABLED_ENCODERS_COUNT>1"}
-#define ENCODER2_BUTTON_PIN 13       //{"Name":"ENCODER2_BUTTON_PIN","Title":"Encoder 2 button (SW) pin","DefaultValue":"13","Type":"pin;Encoder 2 SWITCH","Condition":"ENABLED_ENCODERS_COUNT>1","Min":-1}
+#define ENCODER2_CLK_PIN 33          //{"Name":"ENCODER2_CLK_PIN","Title":"Encoder 2 output A (CLK) pin","DefaultValue":"11","Type":"pin;Encoder 2 CLK","Condition":"ENABLED_ENCODERS_COUNT>1"}
+#define ENCODER2_DT_PIN 34           //{"Name":"ENCODER2_DT_PIN","Title":"Encoder 2 output B (DT) pin","DefaultValue":"12","Type":"pin;Encoder 2 DT","Condition":"ENABLED_ENCODERS_COUNT>1"}
+#define ENCODER2_BUTTON_PIN 35       //{"Name":"ENCODER2_BUTTON_PIN","Title":"Encoder 2 button (SW) pin","DefaultValue":"13","Type":"pin;Encoder 2 SWITCH","Condition":"ENABLED_ENCODERS_COUNT>1","Min":-1}
 #define ENCODER2_BUTTON_TYPE 0		 //{"Name":"ENCODER2_BUTTON_TYPE","Title":"Is virtual button encoder","DefaultValue":"0","Type":"list","Condition":"ENABLED_ENCODERS_COUNT>1","ListValues":"0,Physically Connected;1,Serialized"}
 #define ENCODER2_ENABLE_PULLUP 0     //{"Name":"ENCODER2_ENABLE_PULLUP","Title":"Encoder 2 enable pullup resistor","DefaultValue":"0","Type":"bool","Condition":"ENABLED_ENCODERS_COUNT>1"}
 #define ENCODER2_REVERSE_DIRECTION 0 //{"Name":"ENCODER2_REVERSE_DIRECTION","Title":"Encoder 2 reverse direction","DefaultValue":"0","Type":"bool","Condition":"ENABLED_ENCODERS_COUNT>1"}
 #define ENCODER2_ENABLE_HALFSTEPS 0  //{"Name":"ENCODER2_ENABLE_HALFSTEPS","Title":"Encoder 2 steps mode","DefaultValue":"0","Type":"list","Condition":"ENABLED_ENCODERS_COUNT>=2","ListValues":"0,Full steps;1,Half steps"}
 #define ENCODER2_TYPE 0			 	 //{"Name":"ENCODER1_TYPE","Title":"Is virtual encoder","DefaultValue":"0","Type":"list","Condition":"ENABLED_ENCODERS_COUNT>1","ListValues":"0,Physically Connected;1,Serialized"}
 
-#define ENCODER3_CLK_PIN 7           //{"Name":"ENCODER3_CLK_PIN","Title":"Encoder 3 output A (CLK) pin","DefaultValue":"7","Type":"pin;Encoder 3 CLK","Condition":"ENABLED_ENCODERS_COUNT>2"}
-#define ENCODER3_DT_PIN 8            //{"Name":"ENCODER3_DT_PIN","Title":"Encoder 3 output B (DT) pin","DefaultValue":"8","Type":"pin;Encoder 3 DT","Condition":"ENABLED_ENCODERS_COUNT>2"}
-#define ENCODER3_BUTTON_PIN 9        //{"Name":"ENCODER3_BUTTON_PIN","Title":"Encoder 3 button (SW) pin","DefaultValue":"9","Type":"pin;Encoder 3 SWITCH","Condition":"ENABLED_ENCODERS_COUNT>2","Min":-1}
+#define ENCODER3_CLK_PIN D5           //{"Name":"ENCODER3_CLK_PIN","Title":"Encoder 3 output A (CLK) pin","DefaultValue":"7","Type":"pin;Encoder 3 CLK","Condition":"ENABLED_ENCODERS_COUNT>2"}
+#define ENCODER3_DT_PIN D6            //{"Name":"ENCODER3_DT_PIN","Title":"Encoder 3 output B (DT) pin","DefaultValue":"8","Type":"pin;Encoder 3 DT","Condition":"ENABLED_ENCODERS_COUNT>2"}
+#define ENCODER3_BUTTON_PIN D7        //{"Name":"ENCODER3_BUTTON_PIN","Title":"Encoder 3 button (SW) pin","DefaultValue":"9","Type":"pin;Encoder 3 SWITCH","Condition":"ENABLED_ENCODERS_COUNT>2","Min":-1}
 #define ENCODER3_BUTTON_TYPE 0		 //{"Name":"ENCODER3_BUTTON_TYPE","Title":"Is virtual button encoder","DefaultValue":"0","Type":"list","Condition":"ENABLED_ENCODERS_COUNT>=3","ListValues":"0,Physically Connected;1,Serialized"}
 #define ENCODER3_ENABLE_PULLUP 0     //{"Name":"ENCODER3_ENABLE_PULLUP","Title":"Encoder 3 enable pullup resistor","DefaultValue":"0","Type":"bool","Condition":"ENABLED_ENCODERS_COUNT>2"}
 #define ENCODER3_REVERSE_DIRECTION 0 //{"Name":"ENCODER3_REVERSE_DIRECTION","Title":"Encoder 3 reverse direction","DefaultValue":"0","Type":"bool","Condition":"ENABLED_ENCODERS_COUNT>2"}
 #define ENCODER3_ENABLE_HALFSTEPS 0  //{"Name":"ENCODER3_ENABLE_HALFSTEPS","Title":"Encoder 3 steps mode","DefaultValue":"0","Type":"list","Condition":"ENABLED_ENCODERS_COUNT>=3","ListValues":"0,Full steps;1,Half steps"}
 #define ENCODER3_TYPE 0			 	 //{"Name":"ENCODER3_TYPE","Title":"Is virtual encoder","DefaultValue":"0","Type":"list","Condition":"ENABLED_ENCODERS_COUNT>=3","ListValues":"0,Physically Connected;1,Serialized"}
 
-#define ENCODER4_CLK_PIN 7           //{"Name":"ENCODER4_CLK_PIN","Title":"Encoder 4 output A (CLK) pin","DefaultValue":"7","Type":"pin;Encoder 4 CLK","Condition":"ENABLED_ENCODERS_COUNT>3"}
-#define ENCODER4_DT_PIN 8            //{"Name":"ENCODER4_DT_PIN","Title":"Encoder 4 output B (DT) pin","DefaultValue":"8","Type":"pin;Encoder 4 DT","Condition":"ENABLED_ENCODERS_COUNT>3"}
-#define ENCODER4_BUTTON_PIN 9        //{"Name":"ENCODER4_BUTTON_PIN","Title":"Encoder 4 button (SW) pin","DefaultValue":"9","Type":"pin;Encoder 4 SWITCH","Condition":"ENABLED_ENCODERS_COUNT>3","Min":-1}
+#define ENCODER4_CLK_PIN D5           //{"Name":"ENCODER4_CLK_PIN","Title":"Encoder 4 output A (CLK) pin","DefaultValue":"7","Type":"pin;Encoder 4 CLK","Condition":"ENABLED_ENCODERS_COUNT>3"}
+#define ENCODER4_DT_PIN D6            //{"Name":"ENCODER4_DT_PIN","Title":"Encoder 4 output B (DT) pin","DefaultValue":"8","Type":"pin;Encoder 4 DT","Condition":"ENABLED_ENCODERS_COUNT>3"}
+#define ENCODER4_BUTTON_PIN D7        //{"Name":"ENCODER4_BUTTON_PIN","Title":"Encoder 4 button (SW) pin","DefaultValue":"9","Type":"pin;Encoder 4 SWITCH","Condition":"ENABLED_ENCODERS_COUNT>3","Min":-1}
 #define ENCODER4_BUTTON_TYPE 0		 //{"Name":"ENCODER4_BUTTON_TYPE","Title":"Is virtual button encoder","DefaultValue":"0","Type":"list","Condition":"ENABLED_ENCODERS_COUNT>3","ListValues":"0,Physically Connected;1,Serialized"}
 #define ENCODER4_ENABLE_PULLUP 0     //{"Name":"ENCODER4_ENABLE_PULLUP","Title":"Encoder 4 enable pullup resistor","DefaultValue":"0","Type":"bool","Condition":"ENABLED_ENCODERS_COUNT>3"}
 #define ENCODER4_REVERSE_DIRECTION 0 //{"Name":"ENCODER4_REVERSE_DIRECTION","Title":"Encoder 4 reverse direction","DefaultValue":"0","Type":"bool","Condition":"ENABLED_ENCODERS_COUNT>3"}
@@ -726,7 +726,7 @@ SHDebouncer ButtonsDebouncer(10);
 int ENCODER_TYPE[]={ENCODER1_TYPE,ENCODER2_TYPE,ENCODER3_TYPE,ENCODER4_TYPE,ENCODER5_TYPE,ENCODER6_TYPE,ENCODER7_TYPE,ENCODER8_TYPE};
 //SHRotaryEncoder encoder1, encoder2, encoder3, encoder4, encoder5, encoder6, encoder7, encoder8;
 //SHRotaryEncoder* SHRotaryEncoders[] = { &encoder1, &encoder2, &encoder3, &encoder4, &encoder5, &encoder6, &encoder7, &encoder8 };
-SHRotaryEncoder* SHRotaryEncoders[8];
+SHRotaryEncoder* SHRotaryEncoders[ENABLED_ENCODERS_COUNT];
 #endif
 
 // ----------------------- ROTARY ENCODERS ------------------------------------------------------------------
@@ -1172,9 +1172,9 @@ void EncoderPositionChanged(int encoderId, int position, byte direction) {
 */
 void axisStatusChanged(int axisId,int mappedValue){
 	#if I2C_SERIAL_BYPASS
-		if(I2C_SERIAL_BYPASS_DEBUG){
+		#if I2C_SERIAL_BYPASS_DEBUG
 			Serial.print("AxisStatusChanged");
-		}
+		#endif
 		
 	  	arqserial.CustomPacketStart(0x13,3);
 		arqserial.CustomPacketSendByte(axisId);
@@ -1246,6 +1246,10 @@ void InitEncoders() ;
 */
 void setup()
 {
+
+  FlowSerialBegin(19200);
+  //while (!Serial1) ; // https://forum.arduino.cc/t/cant-view-serial-print-from-setup/167916
+
 #if INCLUDE_WIFI
 #if DEBUG_TCP_BRIDGE
 	Serial.begin(115200);
@@ -1258,7 +1262,9 @@ void setup()
 
 #if I2C_SERIAL_BYPASS
 	Serial.begin(115200);
+	while(!Serial);
 	Serial.println("MAIN - SETUP - I2C_SERIAL_BYPASS");
+	
 	I2CTransportManager::setup(&outgoingStream);
 	//axis1.setCallBack(axisStatusChanged);
 
@@ -1270,9 +1276,6 @@ void setup()
 #ifdef INCLUDE_FUELGAUGE
 	shFUELPIN.SetValue((int)80);
 #endif
-
-	FlowSerialBegin(19200);
-	while (!Serial1) ; // https://forum.arduino.cc/t/cant-view-serial-print-from-setup/167916
 	
 
 #if I2C_BYPASS_SLAVE 
@@ -1297,7 +1300,7 @@ void setup()
 	#if I2C_SERIAL_BYPASS_DEBUG
 	Serial.println("MAIN - SETUP - I2C_SERIAL_BYPASS");
 	#endif
-	I2CTransportManager::setup(&outgoingStream);
+	//I2CTransportManager::setup(&outgoingStream);
 
 	/// TEST TRANSPORT
 	// Serial.println("Lanzando prueba del canal I2C");
