@@ -16,6 +16,7 @@
 	#define I2C_BYPASS_MASTER 	true
 	#define I2C_BYPASS_SLAVE false
 	#define I2C_ADDRESS 0x08
+	#define I2C_BYPASS_SLAVE_ADRESS 8
 	#define I2C_SERIAL_BYPASS_DEBUG true
 	#include <I2CManager.h>
 	#include <AnalogAxis.h>
@@ -42,14 +43,14 @@ FullLoopbackStream incomingStream;
 
 #endif // INCLUDE_WIFI
 
-#define DEVICE_NAME "HelloWorldEsp" //{"Group":"General","Name":"DEVICE_NAME","Title":"Device name,\r\n make sure to use a unique name when using multiple arduinos","DefaultValue":"SimHub Dash","Type":"string","Template":"#define DEVICE_NAME \"{0}\""}
+#define DEVICE_NAME "ESP-SIMHUB-I2C-SLAVE" //{"Group":"General","Name":"DEVICE_NAME","Title":"Device name,\r\n make sure to use a unique name when using multiple arduinos","DefaultValue":"SimHub Dash","Type":"string","Template":"#define DEVICE_NAME \"{0}\""}
 
 // Known working features:
 //  
 //#define INCLUDE_RGB_LEDS_NEOPIXELBUS        // use this instead of INCLUDE_WS2812B
 //#define INCLUDE_WS2812B                     // consider using INCLUDE_RGB_LEDS_NEOPIXELBUS {"Name":"INCLUDE_WS2812B","Type":"autodefine","Condition":"[WS2812B_RGBLEDCOUNT]>0"}
 //#define INCLUDE_WS2812B_MATRIX              //{"Name":"INCLUDE_WS2812B_MATRIX","Type":"autodefine","Condition":"[WS2812B_MATRIX_ENABLED]>0"}
-//#define INCLUDE_BUTTONS                     //{"Name":"INCLUDE_BUTTONS","Type":"autodefine","Condition":"[ENABLED_BUTTONS_COUNT]>0","IsInput":true}
+#define INCLUDE_BUTTONS                     //{"Name":"INCLUDE_BUTTONS","Type":"autodefine","Condition":"[ENABLED_BUTTONS_COUNT]>0","IsInput":true}
 //#define INCLUDE_BUTTONMATRIX                //{"Name":"INCLUDE_BUTTONMATRIX","Type":"autodefine","Condition":"[ENABLED_BUTTONMATRIX]>0","IsInput":true}
 //#define INCLUDE_TM1637                      //{"Name":"INCLUDE_TM1637","Type":"autodefine","Condition":"[TM1637_ENABLEDMODULES]>0"}
 //#define INCLUDE_TM1638                      //{"Name":"INCLUDE_TM1638","Type":"autodefine","Condition":"[TM1638_ENABLEDMODULES]>0"}
@@ -81,7 +82,7 @@ FullLoopbackStream incomingStream;
 //#define INCLUDE_SHAKEITL298N                //{"Name":"INCLUDE_SHAKEITL298N","Type":"autodefine","Condition":"[L98NMOTORS_ENABLED]>0"}
 //#define INCLUDE_SHAKEITMOTOMONSTER          //{"Name":"INCLUDE_SHAKEITMOTOMONSTER","Type":"autodefine","Condition":"[MOTOMONSTER_ENABLED]>0"}
 //#define INCLUDE_SHAKEIDUALVNH5019           //{"Name":"INCLUDE_SHAKEIDUALVNH5019","Type":"autodefine","Condition":"[DUALVNH5019_ENABLED]>0"}
-//#define INCLUDE_ENCODERS                    //{"Name":"INCLUDE_ENCODERS","Type":"autodefine","Condition":"[ENABLED_ENCODERS_COUNT]>0","IsInput":true}
+#define INCLUDE_ENCODERS                    //{"Name":"INCLUDE_ENCODERS","Type":"autodefine","Condition":"[ENABLED_ENCODERS_COUNT]>0","IsInput":true}
 //#define INCLUDE_DM163_MATRIX                //{"Name":"INCLUDE_DM163_MATRIX","Type":"autodefine","Condition":"[DM163_MATRIX_ENABLED]>0"}
 //#define INCLUDE_SUNFOUNDERSH104P_MATRIX     //{"Name":"INCLUDE_SUNFOUNDERSH104P_MATRIX","Type":"autodefine","Condition":"[SUNFOUNDERSH104P_MATRIX_ENABLED]>0"}
 
@@ -560,44 +561,44 @@ SHGamepadAxis SHGAMEPADAXIS03(GAMEPAD_AXIS_03_PIN, 2, GAMEPAD_AXIS_03_MINVALUE, 
 // ----------------------- ADDITIONAL BUTTONS ---------------------------------------------------------------
 // https://github.com/zegreatclan/SimHub/wiki/Arduino-Press-Buttons
 // ----------------------------------------------------------------------------------------------------------
-#define ENABLED_BUTTONS_COUNT 2 //{"Group":"Additional Buttons","Name":"ENABLED_BUTTONS_COUNT","Title":"Additional buttons (directly connected to the arduino, 12 max) buttons count","DefaultValue":"0","Type":"int","Max":12}
+#define ENABLED_BUTTONS_COUNT 7 //{"Group":"Additional Buttons","Name":"ENABLED_BUTTONS_COUNT","Title":"Additional buttons (directly connected to the arduino, 12 max) buttons count","DefaultValue":"0","Type":"int","Max":12}
 #ifdef  INCLUDE_BUTTONS
 
-#define BUTTON_PIN_1 D3         //{"Name":"BUTTON_PIN_1","Title":"1'st Additional button digital pin","DefaultValue":"3","Type":"pin;Button 1","Condition":"ENABLED_BUTTONS_COUNT>=1"}
+#define BUTTON_PIN_1 33         //{"Name":"BUTTON_PIN_1","Title":"1'st Additional button digital pin","DefaultValue":"3","Type":"pin;Button 1","Condition":"ENABLED_BUTTONS_COUNT>=1"}
 #define BUTTON_WIRINGMODE_1 0   //{"Name":"BUTTON_WIRINGMODE_1","Title":"1'st Additional button wiring","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=1","ListValues":"0,Pin to GND;1,VCC to pin"}
 #define BUTTON_LOGICMODE_1 0    //{"Name":"BUTTON_LOGICMODE_1","Title":"1'st Additional button logic","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=1","ListValues":"0,Normal;1,Reversed"}
-#define BUTTON_TYPE_1 0			//{"Name":"BUTTON_TYPE_1","Title":"Is virtual button","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=1","ListValues":"0,Physically Connected;1,Serialized"}
+#define BUTTON_TYPE_1 1			//{"Name":"BUTTON_TYPE_1","Title":"Is virtual button","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=1","ListValues":"0,Physically Connected;1,Serialized"}
 
-#define BUTTON_PIN_2 D4          //{"Name":"BUTTON_PIN_2","Title":"2'nd Additional button digital pin","DefaultValue":"3","Type":"pin;Button 2","Condition":"ENABLED_BUTTONS_COUNT>=2"}
+#define BUTTON_PIN_2 34          //{"Name":"BUTTON_PIN_2","Title":"2'nd Additional button digital pin","DefaultValue":"3","Type":"pin;Button 2","Condition":"ENABLED_BUTTONS_COUNT>=2"}
 #define BUTTON_WIRINGMODE_2 0   //{"Name":"BUTTON_WIRINGMODE_2","Title":"2'nd Additional button wiring","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=2","ListValues":"0,Pin to GND;1,VCC to pin"}
 #define BUTTON_LOGICMODE_2 0    //{"Name":"BUTTON_LOGICMODE_2","Title":"2'nd Additional button logic","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=2","ListValues":"0,Normal;1,Reversed"}
-#define BUTTON_TYPE_2 0			//{"Name":"BUTTON_TYPE_2","Title":"Is virtual button","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=2","ListValues":"0,Physically Connected;1,Serialized"}
+#define BUTTON_TYPE_2 1			//{"Name":"BUTTON_TYPE_2","Title":"Is virtual button","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=2","ListValues":"0,Physically Connected;1,Serialized"}
 
-#define BUTTON_PIN_3 D5          //{"Name":"BUTTON_PIN_3","Title":"3'rd Additional button digital pin","DefaultValue":"3","Type":"pin;Button 3","Condition":"ENABLED_BUTTONS_COUNT>=3"}
+#define BUTTON_PIN_3 35          //{"Name":"BUTTON_PIN_3","Title":"3'rd Additional button digital pin","DefaultValue":"3","Type":"pin;Button 3","Condition":"ENABLED_BUTTONS_COUNT>=3"}
 #define BUTTON_WIRINGMODE_3 0   //{"Name":"BUTTON_WIRINGMODE_3","Title":"3'rd Additional button wiring","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=3","ListValues":"0,Pin to GND;1,VCC to pin"}
 #define BUTTON_LOGICMODE_3 0    //{"Name":"BUTTON_LOGICMODE_3","Title":"3'rd Additional button logic","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=3","ListValues":"0,Normal;1,Reversed"}
-#define BUTTON_TYPE_3 0			//{"Name":"BUTTON_TYPE_3","Title":"Is virtual button","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=3","ListValues":"0,Physically Connected;1,Serialized"}
+#define BUTTON_TYPE_3 1			//{"Name":"BUTTON_TYPE_3","Title":"Is virtual button","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=3","ListValues":"0,Physically Connected;1,Serialized"}
 
-#define BUTTON_PIN_4 D6          //{"Name":"BUTTON_PIN_4","Title":"4'th Additional button digital pin","DefaultValue":"3","Type":"pin;Button 4","Condition":"ENABLED_BUTTONS_COUNT>=4"}
+#define BUTTON_PIN_4 36          //{"Name":"BUTTON_PIN_4","Title":"4'th Additional button digital pin","DefaultValue":"3","Type":"pin;Button 4","Condition":"ENABLED_BUTTONS_COUNT>=4"}
 #define BUTTON_WIRINGMODE_4 0   //{"Name":"BUTTON_WIRINGMODE_4","Title":"4'th Additional button wiring","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=4","ListValues":"0,Pin to GND;1,VCC to pin"}
 #define BUTTON_LOGICMODE_4 0    //{"Name":"BUTTON_LOGICMODE_4","Title":"4'th Additional button logic","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=4","ListValues":"0,Normal;1,Reversed"}
-#define BUTTON_TYPE_4 0			//{"Name":"BUTTON_TYPE_4","Title":"Is virtual button","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=4","ListValues":"0,Physically Connected;1,Serialized"}
+#define BUTTON_TYPE_4 1			//{"Name":"BUTTON_TYPE_4","Title":"Is virtual button","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=4","ListValues":"0,Physically Connected;1,Serialized"}
 
-#define BUTTON_PIN_5 D7          //{"Name":"BUTTON_PIN_5","Title":"5'th Additional button digital pin","DefaultValue":"3","Type":"pin;Button 5","Condition":"ENABLED_BUTTONS_COUNT>=5"}
+#define BUTTON_PIN_5 37          //{"Name":"BUTTON_PIN_5","Title":"5'th Additional button digital pin","DefaultValue":"3","Type":"pin;Button 5","Condition":"ENABLED_BUTTONS_COUNT>=5"}
 #define BUTTON_WIRINGMODE_5 0   //{"Name":"BUTTON_WIRINGMODE_5","Title":"5'th Additional button wiring","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=5","ListValues":"0,Pin to GND;1,VCC to pin"}
 #define BUTTON_LOGICMODE_5 0    //{"Name":"BUTTON_LOGICMODE_5","Title":"5'th Additional button logic","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=5","ListValues":"0,Normal;1,Reversed"}
-#define BUTTON_TYPE_5 0			//{"Name":"BUTTON_TYPE_5","Title":"Is virtual button","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=5","ListValues":"0,Physically Connected;1,Serialized"}
+#define BUTTON_TYPE_5 1			//{"Name":"BUTTON_TYPE_5","Title":"Is virtual button","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=5","ListValues":"0,Physically Connected;1,Serialized"}
 
-#define BUTTON_PIN_6 3          //{"Name":"BUTTON_PIN_6","Title":"6'th Additional button digital pin","DefaultValue":"3","Type":"pin;Button 6","Condition":"ENABLED_BUTTONS_COUNT>=6"}
+#define BUTTON_PIN_6 37          //{"Name":"BUTTON_PIN_6","Title":"6'th Additional button digital pin","DefaultValue":"3","Type":"pin;Button 6","Condition":"ENABLED_BUTTONS_COUNT>=6"}
 #define BUTTON_WIRINGMODE_6 0   //{"Name":"BUTTON_WIRINGMODE_6","Title":"6'th Additional button wiring","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=6","ListValues":"0,Pin to GND;1,VCC to pin"}
 #define BUTTON_LOGICMODE_6 0    //{"Name":"BUTTON_LOGICMODE_6","Title":"6'th Additional button logic","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=6","ListValues":"0,Normal;1,Reversed"}
-#define BUTTON_TYPE_6 0			//{"Name":"BUTTON_TYPE_6","Title":"Is virtual button","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=6","ListValues":"0,Physically Connected;1,Serialized"}
+#define BUTTON_TYPE_6 1			//{"Name":"BUTTON_TYPE_6","Title":"Is virtual button","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=6","ListValues":"0,Physically Connected;1,Serialized"}
 
-#define BUTTON_PIN_7 3          //{"Name":"BUTTON_PIN_7","Title":"7'th Additional button digital pin","DefaultValue":"3","Type":"pin;Button 7","Condition":"ENABLED_BUTTONS_COUNT>=7"}
+#define BUTTON_PIN_7 D6          //{"Name":"BUTTON_PIN_7","Title":"7'th Additional button digital pin","DefaultValue":"3","Type":"pin;Button 7","Condition":"ENABLED_BUTTONS_COUNT>=7"}
 #define BUTTON_WIRINGMODE_7 0   //{"Name":"BUTTON_WIRINGMODE_7","Title":"7'th Additional button wiring","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=7","ListValues":"0,Pin to GND;1,VCC to pin"}
 #define BUTTON_LOGICMODE_7 0    //{"Name":"BUTTON_LOGICMODE_7","Title":"7'th Additional button logic","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=7","ListValues":"0,Normal;1,Reversed"}
 #define BUTTON_TYPE_7 0			//{"Name":"BUTTON_TYPE_7","Title":"Is virtual button","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=7","ListValues":"0,Physically Connected;1,Serialized"}
-
+//
 #define BUTTON_PIN_8 1          //{"Name":"BUTTON_PIN_8","Title":"8'th Additional button digital pin","DefaultValue":"3","Type":"pin;Button 8","Condition":"ENABLED_BUTTONS_COUNT>=8"}
 #define BUTTON_WIRINGMODE_8 0   //{"Name":"BUTTON_WIRINGMODE_8","Title":"8'th Additional button wiring","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=8","ListValues":"0,Pin to GND;1,VCC to pin"}
 #define BUTTON_LOGICMODE_8 0    //{"Name":"BUTTON_LOGICMODE_8","Title":"8'th Additional button logic","DefaultValue":"0","Type":"list","Condition":"ENABLED_BUTTONS_COUNT>=8","ListValues":"0,Normal;1,Reversed"}
@@ -640,7 +641,7 @@ SHDebouncer ButtonsDebouncer(10);
 // https://www.dx.com/p/ky-040-rotary-encoder-module-brick-sensor-development-for-arduino-avr-pic-420429#.W9BCM0sza0Q
 // Rotary encoders with pull-up resistors on the 3 outputs
 // ----------------------------------------------------------------------------------------------------------
-#define ENABLED_ENCODERS_COUNT 1     //{"Group":"Rotary Encoders","Name":"ENABLED_ENCODERS_COUNT","Title":"Rotary encoders enabled","DefaultValue":"0","Type":"int","Max":8}
+#define ENABLED_ENCODERS_COUNT 2     //{"Group":"Rotary Encoders","Name":"ENABLED_ENCODERS_COUNT","Title":"Rotary encoders enabled","DefaultValue":"0","Type":"int","Max":8}
 #ifdef  INCLUDE_ENCODERS
 #include "SHRotaryEncoder.h"
 
@@ -650,20 +651,20 @@ SHDebouncer ButtonsDebouncer(10);
 	void VirtualEncoderPositionChanged(int encoderId,int position, byte direction);
 #endif
 
-#define ENCODER1_CLK_PIN D5           //{"Name":"ENCODER1_CLK_PIN","Title":"Encoder 1 output A (CLK) pin","DefaultValue":"7","Type":"pin;Encoder 1 CLK","Condition":"ENABLED_ENCODERS_COUNT>0"}
-#define ENCODER1_DT_PIN D6            //{"Name":"ENCODER1_DT_PIN","Title":"Encoder 1 output B (DT) pin","DefaultValue":"8","Type":"pin;Encoder 1 DT","Condition":"ENABLED_ENCODERS_COUNT>0"}
-#define ENCODER1_BUTTON_PIN D7        //{"Name":"ENCODER1_BUTTON_PIN","Title":"Encoder 1 button (SW) pin","DefaultValue":"9","Type":"pin;Encoder 1 SWITCH","Condition":"ENABLED_ENCODERS_COUNT>0","Min":-1}
+#define ENCODER1_CLK_PIN D3           //{"Name":"ENCODER1_CLK_PIN","Title":"Encoder 1 output A (CLK) pin","DefaultValue":"7","Type":"pin;Encoder 1 CLK","Condition":"ENABLED_ENCODERS_COUNT>0"}
+#define ENCODER1_DT_PIN D4            //{"Name":"ENCODER1_DT_PIN","Title":"Encoder 1 output B (DT) pin","DefaultValue":"8","Type":"pin;Encoder 1 DT","Condition":"ENABLED_ENCODERS_COUNT>0"}
+#define ENCODER1_BUTTON_PIN 33        //{"Name":"ENCODER1_BUTTON_PIN","Title":"Encoder 1 button (SW) pin","DefaultValue":"9","Type":"pin;Encoder 1 SWITCH","Condition":"ENABLED_ENCODERS_COUNT>0","Min":-1}
 #define ENCODER1_BUTTON_TYPE 0		 //{"Name":"ENCODER1_BUTTON_TYPE","Title":"Is virtual button encoder","DefaultValue":"0","Type":"list","Condition":"ENABLED_ENCODERS_COUNT>0","ListValues":"0,Physically Connected;1,Serialized"}
 #define ENCODER1_ENABLE_PULLUP 1     //{"Name":"ENCODER1_ENABLE_PULLUP","Title":"Encoder 1 enable pullup resistor","DefaultValue":"0","Type":"bool","Condition":"ENABLED_ENCODERS_COUNT>0"}
 #define ENCODER1_REVERSE_DIRECTION 0 //{"Name":"ENCODER1_REVERSE_DIRECTION","Title":"Encoder 1 reverse direction","DefaultValue":"0","Type":"bool","Condition":"ENABLED_ENCODERS_COUNT>0"}
 #define ENCODER1_ENABLE_HALFSTEPS 0  //{"Name":"ENCODER1_ENABLE_HALFSTEPS","Title":"Encoder 1 steps mode","DefaultValue":"0","Type":"list","Condition":"ENABLED_ENCODERS_COUNT>=1","ListValues":"0,Full steps;1,Half steps"}
 #define ENCODER1_TYPE 0			 	 //{"Name":"ENCODER1_TYPE","Title":"Is virtual encoder","DefaultValue":"0","Type":"list","Condition":"ENABLED_ENCODERS_COUNT>0","ListValues":"0,Physically Connected;1,Serialized"}
 
-#define ENCODER2_CLK_PIN 33          //{"Name":"ENCODER2_CLK_PIN","Title":"Encoder 2 output A (CLK) pin","DefaultValue":"11","Type":"pin;Encoder 2 CLK","Condition":"ENABLED_ENCODERS_COUNT>1"}
-#define ENCODER2_DT_PIN 34           //{"Name":"ENCODER2_DT_PIN","Title":"Encoder 2 output B (DT) pin","DefaultValue":"12","Type":"pin;Encoder 2 DT","Condition":"ENABLED_ENCODERS_COUNT>1"}
+#define ENCODER2_CLK_PIN D5          //{"Name":"ENCODER2_CLK_PIN","Title":"Encoder 2 output A (CLK) pin","DefaultValue":"11","Type":"pin;Encoder 2 CLK","Condition":"ENABLED_ENCODERS_COUNT>1"}
+#define ENCODER2_DT_PIN D7           //{"Name":"ENCODER2_DT_PIN","Title":"Encoder 2 output B (DT) pin","DefaultValue":"12","Type":"pin;Encoder 2 DT","Condition":"ENABLED_ENCODERS_COUNT>1"}
 #define ENCODER2_BUTTON_PIN 35       //{"Name":"ENCODER2_BUTTON_PIN","Title":"Encoder 2 button (SW) pin","DefaultValue":"13","Type":"pin;Encoder 2 SWITCH","Condition":"ENABLED_ENCODERS_COUNT>1","Min":-1}
 #define ENCODER2_BUTTON_TYPE 0		 //{"Name":"ENCODER2_BUTTON_TYPE","Title":"Is virtual button encoder","DefaultValue":"0","Type":"list","Condition":"ENABLED_ENCODERS_COUNT>1","ListValues":"0,Physically Connected;1,Serialized"}
-#define ENCODER2_ENABLE_PULLUP 0     //{"Name":"ENCODER2_ENABLE_PULLUP","Title":"Encoder 2 enable pullup resistor","DefaultValue":"0","Type":"bool","Condition":"ENABLED_ENCODERS_COUNT>1"}
+#define ENCODER2_ENABLE_PULLUP 1     //{"Name":"ENCODER2_ENABLE_PULLUP","Title":"Encoder 2 enable pullup resistor","DefaultValue":"0","Type":"bool","Condition":"ENABLED_ENCODERS_COUNT>1"}
 #define ENCODER2_REVERSE_DIRECTION 0 //{"Name":"ENCODER2_REVERSE_DIRECTION","Title":"Encoder 2 reverse direction","DefaultValue":"0","Type":"bool","Condition":"ENABLED_ENCODERS_COUNT>1"}
 #define ENCODER2_ENABLE_HALFSTEPS 0  //{"Name":"ENCODER2_ENABLE_HALFSTEPS","Title":"Encoder 2 steps mode","DefaultValue":"0","Type":"list","Condition":"ENABLED_ENCODERS_COUNT>=2","ListValues":"0,Full steps;1,Half steps"}
 #define ENCODER2_TYPE 0			 	 //{"Name":"ENCODER1_TYPE","Title":"Is virtual encoder","DefaultValue":"0","Type":"list","Condition":"ENABLED_ENCODERS_COUNT>1","ListValues":"0,Physically Connected;1,Serialized"}
@@ -1231,6 +1232,7 @@ void buttonMatrixStatusChanged(int buttonId, byte Status) {
  		Serial.print(" Bytes");
  		Serial.flush();
 	#endif
+	/// IN SLAvE MODE WE MUST REDIRECT TO STREAMWRITE
  	decodeBuffer(&callbacker,&Wire);
  }
  
@@ -1260,8 +1262,8 @@ void setup()
 #endif
 
 #if I2C_SERIAL_BYPASS
-	Serial.begin(115200);
-	while(!Serial);
+	// Serial.begin(19200);
+	// while(!Serial);
 	Serial.println("MAIN - SETUP - I2C_SERIAL_BYPASS");
 	
 	I2CTransportManager::setup(&outgoingStream);
@@ -1284,9 +1286,9 @@ void setup()
 	#endif
 
 // 	callbacker.setAnalogAxisChangedEventCallback(analogAxisChangedEventCallback);
-	Wire.begin(I2C_BYPASS_SLAVE_ADRESS);                /* join i2c bus with address 8 */
-	Wire.setWireTimeout(1000);
-	Wire.onReceive(receiveSerialProtocolViaI2c);
+	WIRE.begin(I2C_BYPASS_SLAVE_ADRESS);                /* join i2c bus with address 8 */
+	WIRE.setTimeout(1000);
+	WIRE.onReceive(receiveSerialProtocolViaI2c);
  
 	// TODO: IN ENCODERS BRANCH
 	 #ifdef  INCLUDE_ENCODERS
@@ -1659,6 +1661,9 @@ void loop() {
 			lastSerialActivity = millis();
 			// Read command
 			loop_opt = FlowSerialTimedRead();
+			// Serial.print("CONVERSATION COMMAND: ");
+			// Serial.print(loop_opt);
+			// Serial.print("\n");
 			
 			switch(loop_opt) {
 				case '1': Command_Hello(); break;

@@ -33,14 +33,14 @@ void Command_Acq() {
 
 void Command_DeviceName() {
 	FlowSerialPrint(DEVICE_NAME);
-	FlowSerialPrint("\n");
+	//FlowSerialPrint("\n");
 	FlowSerialFlush();
 }
 
 void Command_UniqueId() {
 	auto id = getUniqueId();
 	FlowSerialPrint(id);
-	FlowSerialPrint("\n");
+	//FlowSerialPrint("\n");
 	FlowSerialFlush();
 }
 

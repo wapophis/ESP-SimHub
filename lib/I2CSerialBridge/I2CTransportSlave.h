@@ -16,7 +16,7 @@ class I2CTransportSlave : public I2CTransport {
 	static Stream *outgoingStream;
     public:
 	 void setup(Stream *outgoingStream){
-		this->outgoingStream=outgoingStream;
+		//this->outgoingStream=outgoingStream;
 		ic2SetupSlave();
 	}
 
@@ -35,6 +35,7 @@ class I2CTransportSlave : public I2CTransport {
 			bffer[bfferIdx]=c;
 			bfferIdx++;
 			}
+		
 		StreamWrite(&bffer,sizeof(bffer));
 	};
 
